@@ -40,7 +40,7 @@
 
 ### 方式一：直接使用（推荐给普通用户）
 
-1. 下载 [`dist/宽带自动拨号.bat`](dist/宽带自动拨号.bat)
+1. 到 [Releases](https://github.com/zhhw2006-byte/broadband-autodial/releases/latest) 下载 `broadband-autodial-v1.0.0.bat`
 2. 双击运行，UAC 弹窗点「是」
 3. 输入数字 `1`，按提示输入宽带账号密码
 4. 完成
