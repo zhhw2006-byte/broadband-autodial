@@ -1,0 +1,40 @@
+# ---- 系统与编辑器 ----
+Thumbs.db
+desktop.ini
+.DS_Store
+*.swp
+*~
+
+# ---- 临时产物 ----
+*.tmp
+*.bak
+*.log
+*.old
+~$*
+
+# ---- 构建中间文件 ----
+/build/out/
+*.b64
+
+# ---- 运行期产物（不应进仓库）----
+# 电话簿备份
+rasphone.pbk*
+# 计划任务导出
+task-backup-*.xml
+task-*.xml
+# 调试脚本
+run-*.bat
+fix-*.ps1
+reconnect-*.ps1
+restore-*.ps1
+set-pppoe-*.ps1
+save-*.ps1
+read-ras-*.ps1
+add-event-*.ps1
+install-autodial-guard.ps1
+autodial-guard.ps1
+
+# ---- 个人/测试数据 ----
+/network-backup-*/
+/pbk-backup-*/
+pppoe-log-*.txt

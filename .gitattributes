@@ -1,0 +1,21 @@
+# 行尾与编码策略
+# 本项目为 Windows 专用，源码统一 CRLF，分发包按二进制存储以保证字节可复现。
+
+* text=auto eol=lf
+
+# PowerShell 源码：CRLF + UTF-8 BOM（BOM 由文件内容保证，git 不会改动）
+*.ps1 text eol=crlf
+
+# 分发包是构建产物，必须逐字节保持原样，禁止任何行尾转换
+*.bat binary
+
+# 面向用户的文档：CRLF 以便任何版本的记事本都能正确显示
+*.txt text eol=crlf
+
+# 仓库文档
+*.md text eol=lf
+
+# 图片等二进制
+*.png binary
+*.jpg binary
+*.ico binary

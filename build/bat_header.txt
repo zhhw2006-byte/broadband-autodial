@@ -1,0 +1,29 @@
+@echo off
+setlocal
+title Broadband Auto-Dial Setup
+echo ============================================================
+echo   Broadband Auto-Dial - One-Click Setup
+echo                      by MiLiu   QQ 458423691
+echo ============================================================
+echo.
+echo [1/2] Extracting...
+set "SELF=%~f0"
+set "TMPPS=%TEMP%\AutoDialSetup.ps1"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$ErrorActionPreference='Stop';$L=[IO.File]::ReadAllLines($env:SELF,[Text.Encoding]::ASCII);$i=[Array]::IndexOf($L,'::#PAYLOAD#');if($i -lt 0){throw 'payload marker not found'};$parts=@();for($k=$i+1;$k -lt $L.Count;$k++){$s=$L[$k];if($s.Length -gt 2){$parts+=$s.Substring(2)}};$b64=$parts -join '';$txt=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($b64));$txt=$txt.TrimStart([char]0xFEFF);[IO.File]::WriteAllText($env:TMPPS,$txt,(New-Object Text.UTF8Encoding($true)));Write-Host '      done'"
+if not "%ERRORLEVEL%"=="0" goto failed
+echo.
+echo [2/2] Starting setup - a UAC prompt will appear, click Yes.
+echo.
+powershell -NoProfile -ExecutionPolicy Bypass -File "%TMPPS%"
+echo.
+echo This window can be closed.
+pause
+exit /b
+
+:failed
+echo.
+echo ERROR: extraction failed, see message above.
+echo Please report this to the provider.
+pause
+exit /b 1
+::#PAYLOAD#
