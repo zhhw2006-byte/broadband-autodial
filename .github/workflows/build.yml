@@ -10,6 +10,11 @@ on:
 permissions:
   contents: read
 
+# 注意：run 块内一律使用 ASCII。
+# GitHub 会把 run 块写成临时 .ps1，Windows PowerShell 5.1 在没有 BOM 时
+# 按 GBK 解码，中文会导致引号/大括号错位，直接语法报错。
+# 中文只放在 name 字段（YAML 按 UTF-8 解析，不受影响）。
+
 jobs:
   build:
     name: 构建分发包并校验可复现性
@@ -25,10 +30,10 @@ jobs:
           $path = "src/Install-AutoDial.ps1"
           $b = [System.IO.File]::ReadAllBytes($path)
           if ($b.Length -lt 3 -or $b[0] -ne 0xEF -or $b[1] -ne 0xBB -or $b[2] -ne 0xBF) {
-            Write-Host "::error file=$path::源码缺少 UTF-8 BOM，中文会乱码"
+            Write-Host "::error file=$path::Source must be UTF-8 with BOM, otherwise Chinese will be garbled."
             exit 1
           }
-          Write-Host "编码检查通过"
+          Write-Host "Encoding check passed."
 
       - name: 检查源码语法
         shell: powershell
@@ -37,10 +42,10 @@ jobs:
           [void][System.Management.Automation.Language.Parser]::ParseFile(
             (Resolve-Path "src/Install-AutoDial.ps1"), [ref]$null, [ref]$err)
           if ($err -and $err.Count -gt 0) {
-            $err | ForEach-Object { Write-Host ("::error ::行 " + $_.Extent.StartLineNumber + ": " + $_.Message) }
+            $err | ForEach-Object { Write-Host ("::error ::line " + $_.Extent.StartLineNumber + ": " + $_.Message) }
             exit 1
           }
-          Write-Host "语法检查通过"
+          Write-Host "Syntax check passed."
 
       - name: 构建分发包
         shell: powershell
@@ -51,21 +56,24 @@ jobs:
         run: |
           $diff = git status --porcelain -- dist/
           if ($diff) {
-            Write-Host "::error::构建结果与仓库中的分发包不一致"
+            Write-Host "::error::Built package differs from the committed one."
             Write-Host $diff
             Write-Host ""
-            Write-Host "说明：修改 src 后必须重新运行 build\Build-SingleFile.ps1 并一并提交 dist。"
+            Write-Host "Re-run build\Build-SingleFile.ps1 and commit dist together with src."
             exit 1
           }
-          Write-Host "构建可复现：dist 与仓库完全一致"
+          Write-Host "Reproducible build: dist matches the repository."
 
       - name: 检查分发包为纯 ASCII
         shell: powershell
         run: |
-          $b = [System.IO.File]::ReadAllBytes("dist/宽带自动拨号.bat")
+          # 不直接写中文文件名，避免 run 块被按 GBK 解码后路径错乱
+          $f = Get-ChildItem -LiteralPath "dist" -Filter *.bat | Select-Object -First 1
+          if (-not $f) { Write-Host "::error::No .bat found in dist/"; exit 1 }
+          $b = [System.IO.File]::ReadAllBytes($f.FullName)
           $bad = @($b | Where-Object { $_ -gt 127 }).Count
           if ($bad -gt 0) {
-            Write-Host "::error::分发包包含 $bad 个非 ASCII 字节，可能导致批处理乱码"
+            Write-Host "::error::Package contains $bad non-ASCII bytes, batch file may be garbled."
             exit 1
           }
-          Write-Host "纯 ASCII 检查通过"
+          Write-Host "Pure ASCII check passed: $($f.Name) ($($b.Length) bytes)"
