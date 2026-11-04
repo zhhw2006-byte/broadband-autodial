@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 使用说明
+    url: https://github.com/zhhw2006-byte/broadband-autodial/blob/main/docs/%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.txt
+    about: 安装步骤、菜单说明、常见错误码对照，建议先看一遍
+  - name: 下载最新版本
+    url: https://github.com/zhhw2006-byte/broadband-autodial/releases/latest
+    about: 获取可直接双击运行的分发包

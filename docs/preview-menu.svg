@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="540" viewBox="0 0 880 540" font-family="'Cascadia Mono','Consolas','Microsoft YaHei Mono','Microsoft YaHei',monospace">
+  <defs>
+    <style>
+      .t  { font-size: 17px; fill: #E5E7EB; }
+      .d  { font-size: 17px; fill: #6B7280; }
+      .c  { font-size: 17px; fill: #3BC9DB; }
+      .cb { font-size: 17px; fill: #3BC9DB; font-weight: 700; }
+      .g  { font-size: 17px; fill: #4ADE80; }
+    </style>
+  </defs>
+
+  <!-- 窗口 -->
+  <rect width="880" height="540" rx="8" fill="#0C0C0C"/>
+  <rect width="880" height="36" rx="8" fill="#1F1F1F"/>
+  <rect y="28" width="880" height="8" fill="#1F1F1F"/>
+
+  <!-- 标题栏 -->
+  <circle cx="22" cy="18" r="6" fill="#FF5F57"/>
+  <circle cx="42" cy="18" r="6" fill="#FEBC2E"/>
+  <circle cx="62" cy="18" r="6" fill="#28C840"/>
+  <text x="440" y="23" font-size="13" fill="#9CA3AF" text-anchor="middle">管理员: Windows PowerShell</text>
+
+  <!-- 内容 -->
+  <text class="d" x="28" y="76">运行环境: Windows 10.0.26100 / PowerShell 5.1</text>
+
+  <text class="c" x="28" y="122">==============================================================</text>
+  <text class="cb" x="28" y="148">  宽带自动拨号 · 部署工具</text>
+  <text class="d" x="28" y="174">                                    by 弥琉  QQ 458423691</text>
+  <text class="c" x="28" y="200">==============================================================</text>
+  <text class="d" x="28" y="226">  当前状态: 已安装</text>
+
+  <text class="t" x="28" y="278">   [1] 安装 / 修复（全自动，只需输入账号密码）</text>
+  <text class="t" x="28" y="304">   [2] 修改宽带账号密码</text>
+  <text class="t" x="28" y="330">   [3] 一键卸载（清除本工具创建的全部内容）</text>
+  <text class="t" x="28" y="356">   [4] 删除指定宽带连接（手动选择，谨慎使用）</text>
+  <text class="t" x="28" y="382">   [5] 仅新增宽带账号（不安装自动拨号）</text>
+  <text class="t" x="28" y="408">   [6] 查看当前状态（诊断用）</text>
+  <text class="t" x="28" y="434">   [0] 退出</text>
+
+  <text class="t" x="28" y="486"> 请输入选项编号: </text>
+  <rect x="176" y="471" width="12" height="19" fill="#E5E7EB"/>
+</svg>

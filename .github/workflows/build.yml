@@ -1,0 +1,71 @@
+name: Build & Verify
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: 构建分发包并校验可复现性
+    runs-on: windows-latest
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 检查源码编码（必须 UTF-8 带 BOM）
+        shell: powershell
+        run: |
+          $path = "src/Install-AutoDial.ps1"
+          $b = [System.IO.File]::ReadAllBytes($path)
+          if ($b.Length -lt 3 -or $b[0] -ne 0xEF -or $b[1] -ne 0xBB -or $b[2] -ne 0xBF) {
+            Write-Host "::error file=$path::源码缺少 UTF-8 BOM，中文会乱码"
+            exit 1
+          }
+          Write-Host "编码检查通过"
+
+      - name: 检查源码语法
+        shell: powershell
+        run: |
+          $err = $null
+          [void][System.Management.Automation.Language.Parser]::ParseFile(
+            (Resolve-Path "src/Install-AutoDial.ps1"), [ref]$null, [ref]$err)
+          if ($err -and $err.Count -gt 0) {
+            $err | ForEach-Object { Write-Host ("::error ::行 " + $_.Extent.StartLineNumber + ": " + $_.Message) }
+            exit 1
+          }
+          Write-Host "语法检查通过"
+
+      - name: 构建分发包
+        shell: powershell
+        run: .\build\Build-SingleFile.ps1
+
+      - name: 校验构建可复现（dist 必须无差异）
+        shell: powershell
+        run: |
+          $diff = git status --porcelain -- dist/
+          if ($diff) {
+            Write-Host "::error::构建结果与仓库中的分发包不一致"
+            Write-Host $diff
+            Write-Host ""
+            Write-Host "说明：修改 src 后必须重新运行 build\Build-SingleFile.ps1 并一并提交 dist。"
+            exit 1
+          }
+          Write-Host "构建可复现：dist 与仓库完全一致"
+
+      - name: 检查分发包为纯 ASCII
+        shell: powershell
+        run: |
+          $b = [System.IO.File]::ReadAllBytes("dist/宽带自动拨号.bat")
+          $bad = @($b | Where-Object { $_ -gt 127 }).Count
+          if ($bad -gt 0) {
+            Write-Host "::error::分发包包含 $bad 个非 ASCII 字节，可能导致批处理乱码"
+            exit 1
+          }
+          Write-Host "纯 ASCII 检查通过"

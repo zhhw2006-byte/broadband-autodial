@@ -1,0 +1,94 @@
+name: 问题反馈
+description: 安装、拨号、卸载等环节出现异常时使用
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢反馈。请尽量把信息填完整，尤其是「当前状态」那一栏 —— 大部分问题看这一页就能定位。
+
+        > 如果问题涉及账号密码等隐私内容，请自行打码后再粘贴。
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: 问题描述
+      description: 发生了什么？你期望的结果是什么？
+      placeholder: |
+        例如：安装完成后重启，网络没有自动连上，任务管理器里能看到计划任务在运行。
+    validations:
+      required: true
+
+  - type: textarea
+    id: status
+    attributes:
+      label: 当前状态输出
+      description: 运行工具，选 `6`（查看当前状态），把整页内容粘贴到这里
+      render: text
+      placeholder: |
+        ==============================================================
+         当前状态
+        ==============================================================
+         计划任务:
+           状态     : Ready
+           ...
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: Windows 版本
+      description: Win + R 输入 `winver` 可以看到完整版本号
+      placeholder: "例如：Windows 11 23H2 (22631.4169)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: scene
+    attributes:
+      label: 出问题的环节
+      multiple: true
+      options:
+        - 安装 / 修复
+        - 断线后没有自动重连
+        - 开机或解锁后没有自动拨号
+        - 修改账号密码
+        - 卸载
+        - 删除连接
+        - 仅新增账号
+        - 其他
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 怎样的操作顺序能稳定复现？
+      placeholder: |
+        1. 双击 bat，UAC 点"是"
+        2. 选 1，输入账号密码
+        3. 重启电脑
+        4. 停在登录界面时用手机 ping 本机，不通
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: tried
+    attributes:
+      label: 已做过的排查
+      options:
+        - label: 查看过日志 C:\ProgramData\AutoDialGuard\guard.log
+        - label: 确认计划任务「自动拨号宽带」处于"就绪"状态且未被禁用
+        - label: 用菜单 2 重新确认过账号密码
+        - label: 确认杀毒软件没有拦截本工具
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: 补充信息
+      description: 日志片段、截图、错误码等
+    validations:
+      required: false

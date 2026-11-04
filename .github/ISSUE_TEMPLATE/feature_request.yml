@@ -1,0 +1,36 @@
+name: 功能建议
+description: 希望增加或改进的功能
+title: "[Feature] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        欢迎提建议。请说明你遇到的实际场景，而不只是功能名称 —— 场景比方案更能说明问题。
+
+  - type: textarea
+    id: scenario
+    attributes:
+      label: 使用场景
+      description: 你在什么情况下觉得现有功能不够用？
+      placeholder: |
+        例如：家里有两个宽带账号，白天用 A 晚上用 B，
+        现在每次都要重新运行工具改一次，很麻烦。
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 期望的做法
+      description: 你希望工具怎么处理？
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternative
+    attributes:
+      label: 目前怎么绕过
+      description: 在功能实现前，你现在是怎么解决的？
+    validations:
+      required: false
